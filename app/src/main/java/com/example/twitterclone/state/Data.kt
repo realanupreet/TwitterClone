@@ -7,23 +7,23 @@ import com.example.twitterclone.model.Tweet
 import com.example.twitterclone.model.User
 
 
-val sudorizwan = User(
-    name = "Ahmed Rizwan",
-    username = "sudo_rizwan",
+val real_anupreet = User(
+    name = "Anupreet Singh",
+    username = "real_anupreet",
     avatar = R.drawable.profile_photo,
     banner = R.drawable.profile_photo,
-    bio = "Android Engineer @Snappymob",
-    following = 393,
-    followers = 339,
+    bio = "Web Developer // Designer // Android Developer",
+    following = 500,
+    followers = 245,
     verified = false
 )
 
-val androiddevs = User(
-    name = "Android Developers",
-    username = "AndroidDev",
+val googledevs = User(
+    name = "Google Devs India",
+    username = "GoogleDevsIN",
     avatar = R.drawable.profile_photo,
     banner = R.drawable.profile_photo,
-    bio = "News and announcements for developers from the Android team",
+    bio = "News, updates & events from the Google Developers team in India.",
     following = 284,
     followers = 1000,
     verified = true
@@ -49,8 +49,10 @@ val settings = mutableListOf(
 
 val tweets = mutableListOf(
     Tweet(
-        sudorizwan,
-        "This is a test tweet!",
+        real_anupreet,
+        "Made this\uD83D\uDE00\uD83E\uDD29\uD83C\uDF80\n" +
+                "#ComposeCamp , #ComposeCampIndia  #Google #DeveloperStudentClubs #JetpackCompose \n" +
+                "@GoogleDevsin",
         null,
         495,
         false,
@@ -60,10 +62,10 @@ val tweets = mutableListOf(
         1587345183868
     ),
     Tweet(
-        androiddevs,
-        "Kickstart your Kotlin training!\n" +
-                "\n" +
-                "If you're a #Kotlin newbie, start with our Kotlin Bootcamp for programmers and Android Kotlin Fundamentals courses to learn the basics.",
+        googledevs,
+        "Follow your dreams and make it big at Google #DeveloperStudentClubs community! \n"+
+                "Former Lead @san_chotik shares her story → http://goo.gle/3UX4Sqh\n" +
+                "Tune in to hear Sanjana about her passion for driving inclusivity in tech and growing a thriving GDSC @dsciiest Community.",
         R.drawable.profile_photo,
         495,
         true,
@@ -73,8 +75,11 @@ val tweets = mutableListOf(
         1585852320000
     ),
     Tweet(
-        sudorizwan,
-        "Another test tweet, but with an image!",
+        real_anupreet,
+        "Would be travelling around 600+ kilometres for #DevFestJalandhar organized by @GDGJalandhar" +
+                " \n" +
+                "Really excited! This would be my first in-person developer conference \uD83E\uDD7A\uD83C\uDF1F\n" +
+                "Ps: if you would be there, would love to connect with ya!",
         R.drawable.profile_photo,
         495,
         false,
@@ -84,7 +89,7 @@ val tweets = mutableListOf(
         1587345183868
     ),
     Tweet(
-        sudorizwan,
+        real_anupreet,
         "Test tweet 2",
         null,
         495,
@@ -95,7 +100,7 @@ val tweets = mutableListOf(
         1585427520000
     ),
     Tweet(
-        sudorizwan,
+        real_anupreet,
         "Test tweet 3",
         null,
         495,
@@ -106,7 +111,7 @@ val tweets = mutableListOf(
         1585427520000
     ),
     Tweet(
-        androiddevs,
+        googledevs,
         "Android Devs test tweet 1",
         null,
         495,
@@ -117,7 +122,7 @@ val tweets = mutableListOf(
         1585852320000
     ),
     Tweet(
-        androiddevs,
+        googledevs,
         "Android Devs test tweet 2",
         null,
         495,
