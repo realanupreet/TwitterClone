@@ -27,7 +27,7 @@ import com.example.twitterclone.state.drawerrowcontents
 import com.example.twitterclone.state.settings
 
 @Composable
-fun Settings(navController: NavController? = null) {
+fun Settings(navController: NavController? = null,viewModel: MyViewModel?) {
 
     Surface() {
         Column(
@@ -51,29 +51,31 @@ fun Settings(navController: NavController? = null) {
                     Text(text = "Settings", fontWeight = FontWeight.Bold, fontSize = 27.sp)
                 }
             }) {
-                val textState = remember { mutableStateOf(TextFieldValue()) }
+//                val textState = remember { mutableStateOf(TextFieldValue()) }
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.padding(10.dp)
                 ) {
-                    OutlinedTextField(
-                        value = textState.value,
-                        onValueChange = { textState.value = it },
-                        placeholder = {
-                            Row(
-                                horizontalArrangement = Arrangement.Center,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Icon(Icons.Default.Search, contentDescription = null)
-                                Text(text = "Search", textAlign = TextAlign.Center)
-                            }
+                    if (viewModel != null) {
+                        OutlinedTextField(
+                            value = viewModel.settingText,
+                            onValueChange = { viewModel.onSettingTextChange(it) },
+                            placeholder = {
+                                Row(
+                                    horizontalArrangement = Arrangement.Center,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Icon(Icons.Default.Search, contentDescription = null)
+                                    Text(text = "Search", textAlign = TextAlign.Center)
+                                }
 
-                        },
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        shape = RoundedCornerShape(50.dp),
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            shape = RoundedCornerShape(50.dp),
 
-                    )
+                            )
+                    }
                     LazyColumn(Modifier.padding(10.dp)) {
                         items(com.example.twitterclone.state.settings) { content ->
                             com.example.twitterclone.showDrawerRow(
@@ -100,5 +102,5 @@ fun Settings(navController: NavController? = null) {
 @Preview
 @Composable
 fun MainPreviewse() {
-    Settings()
+//    Settings()
 }

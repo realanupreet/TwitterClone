@@ -14,19 +14,20 @@ import com.example.twitterclone.model.User
 
 sealed class Screens(val route: String, val title: String, @DrawableRes val resourceId: Int) {
 
-    object Favorite : Screens("screenone", "Favorite", R.drawable.profile_photo)
+    object Favorite : Screens("screenhome2", "Favorite", R.drawable.home)
     object Notification :
-        Screens("screentwo", "Notification", R.drawable.profile_photo)
+        Screens("screenhome", "Notification", R.drawable.notifications)
 
-    object MyNetwork : Screens("screenhome", "MyNetwork", R.drawable.profile_photo)
-    object Messages : Screens("screenhome", "Messages", R.drawable.profile_photo)
-    object Profile : Screens( "profile/{User}",title = "Profile",resourceId = R.drawable.profile_photo)
+    object MyNetwork : Screens("screenhome", "MyNetwork", R.drawable.search)
+    object Messages : Screens("messages", "Messages", R.drawable.messages)
+    object Profile : Screens( "profile/{User}",title = "Profile",resourceId = R.drawable.home)
+    object ComposeTweet : Screens( "composetweet",title = "ComposeTweet",resourceId = R.drawable.compose)
 }
 
 val items = listOf(
     Screens.Favorite,
-    Screens.Notification,
     Screens.MyNetwork,
+    Screens.Notification,
     Screens.Messages
 )
 

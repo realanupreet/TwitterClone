@@ -7,9 +7,8 @@ data class Tweet(
     val tweet: String,
     @DrawableRes val image: Int?,
     var likes: Int,
-    var liked: Boolean,
+//    var liked: Boolean,
     var retweets: Int,
-    var retweeted: Boolean,
+//    var retweeted: Boolean,
     val comments: Int,
-    val timestamp: Long
 )

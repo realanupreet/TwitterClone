@@ -20,6 +20,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.example.twitterclone.model.Tweet
@@ -38,23 +39,15 @@ fun ScreenHome(navController: NavController? = null) {
 
                 }
             }
-            Spacer(modifier = Modifier.height(50.dp))
-//            modifier = Modifier.fillMaxSize(),
-//            verticalArrangement = Arrangement.Center,
-//            horizontalAlignment = Alignment.CenterHorizontally
-
-
+            Spacer(modifier = Modifier.height(100.dp))
         }
     }
-//        NavigationController(navController = navController)
-//        ScreenHome(navController)
 
 
 }
 
 @Composable
 fun TweetLayout(tweet: Tweet, navController: NavController?) {
-//    Text(text = "$tweet")
     Row(modifier = Modifier.padding(all = 10.dp)) {
         UserAvatar(tweet, navController)
         Spacer(modifier = Modifier.size(12.dp))
@@ -96,14 +89,16 @@ fun UserAvatar(tweet: Tweet, navController: NavController?) {
 @Composable
 fun TweetActions(tweet: Tweet) {
     Row(
-        modifier = Modifier.padding(0.dp,0.dp,15.dp,0.dp).fillMaxWidth(),
+        modifier = Modifier
+            .padding(0.dp, 0.dp, 15.dp, 0.dp)
+            .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Image(
                 painter = painterResource(
-                    R.drawable.profile_photo
+                    R.drawable.comment
                 ),
                 contentDescription = null,
                 modifier = Modifier.size(20.dp)
@@ -113,7 +108,7 @@ fun TweetActions(tweet: Tweet) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Image(
                 painter = painterResource(
-                    R.drawable.profile_photo
+                    R.drawable.retweet
                 ),
                 contentDescription = null,
                 modifier = Modifier.size(20.dp)
@@ -123,7 +118,7 @@ fun TweetActions(tweet: Tweet) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Image(
                 painter = painterResource(
-                    R.drawable.profile_photo
+                    R.drawable.like
                 ),
                 contentDescription = null,
                 modifier = Modifier.size(20.dp)
@@ -133,7 +128,7 @@ fun TweetActions(tweet: Tweet) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Image(
                 painter = painterResource(
-                    R.drawable.profile_photo
+                    R.drawable.share
                 ),
                 contentDescription = null,
                 modifier = Modifier.size(20.dp)
@@ -149,7 +144,7 @@ fun NameAndUserName(tweet: Tweet) {
         Text(text = "${tweet.user.name} ", fontWeight = FontWeight.Bold, color = Color.Black)
         if (tweet.user.verified) {
             Image(
-                painter = painterResource(id = R.drawable.profile_photo),
+                painter = painterResource(id = R.drawable.verified),
                 contentDescription = null,
                 Modifier.size(20.dp)
             )
@@ -168,7 +163,7 @@ fun TweetAndImage(tweet: Tweet) {
             painterResource(tweet.image),
             modifier = Modifier
 //                .size(180.dp)
-               .padding(0.dp,0.dp,15.dp,0.dp)
+                .padding(0.dp, 0.dp, 15.dp, 0.dp)
                 .clip(shape = RoundedCornerShape(5.dp))
                 .fillMaxWidth()
                 .height(180.dp),
@@ -184,5 +179,4 @@ fun TweetAndImage(tweet: Tweet) {
 @Preview
 @Composable
 fun MainPreview4() {
-    ScreenHome()
 }

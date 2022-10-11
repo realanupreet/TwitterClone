@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.MutableInt
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -27,6 +28,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -52,13 +54,13 @@ class MainActivity : ComponentActivity() {
         setContent {
             TwitterCloneTheme {
                 // A surface container using the 'background' color from the theme
+                val viewModel by viewModels<MyViewModel>()
                 var navController = rememberNavController()
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    NavigationController(navController = navController)
-
+                    NavigationController(navController = navController, viewModel)
                 }
             }
         }
@@ -66,22 +68,31 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun NavigationController(navController: NavHostController) {
+fun NavigationController(navController: NavHostController, viewModel: MyViewModel?) {
     NavHost(
         navController = navController,
         startDestination = "screenhome",
     ) {
-        composable("screenone") {
-            ScreenOne(navController)
-        }
-        composable("screentwo") {
-            ScreenTwo(navController)
-        }
+//        composable("screenone") {
+//            ScreenOne(navController)
+//        }
+//        composable("screentwo") {
+//            ScreenTwo(navController)
+//        }
         composable("screenhome") {
             ScreenHome(navController)
         }
+        composable("screenhome2") {
+            ScreenHome(navController)
+        }
         composable("settings") {
-            Settings(navController)
+            Settings(navController,viewModel)
+        }
+        composable("composetweet") {
+            ComposeTweet(navController, viewModel)
+        }
+        composable("messages") {
+            Messages(navController,viewModel)
         }
         composable(
             "profile/{User}",
@@ -102,14 +113,17 @@ fun NavigationController(navController: NavHostController) {
 
 
 @Composable
-fun CommonScaffold(navController: NavController? = null, content: @Composable() () -> Unit) {
-//    val navController = rememberNavController()
+fun CommonScaffold(
+    navController: NavController? = null,
+    content: @Composable() () -> Unit,
+) {
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
-            mytopbar(scope = scope, scaffoldState = scaffoldState)
+                mytopbar(scope = scope, scaffoldState = scaffoldState)
+
         },
         drawerContent = {
 
@@ -121,11 +135,29 @@ fun CommonScaffold(navController: NavController? = null, content: @Composable() 
         },
         bottomBar = {
             mybottombar(navController = navController)
+        },
+        floatingActionButton = {
+            myFab(navController = navController)
         }
     ) {
         content()
     }
 }
+
+@Composable
+fun myFab(navController: NavController?) {
+    FloatingActionButton(
+        onClick = { navController?.navigate("composetweet") },
+        backgroundColor = Color(0xFF03A9F4)
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.compose),
+            contentDescription = "compose tweet",
+            modifier = Modifier.size(30.dp)
+        )
+    }
+}
+
 
 @Composable
 fun showDrawerRow(
@@ -155,6 +187,7 @@ fun showDrawerRow(
         }
     }
     Divider()
+
 }
 
 
@@ -166,23 +199,26 @@ fun mydrawercontent(
 ) {
 
     Column(Modifier.fillMaxSize()) {
-        Column(Modifier.padding(20.dp, 20.dp, 20.dp, 10.dp).clickable {
-            val json = Uri.encode(Gson().toJson(tweets[0].user))
-            navController?.navigate("profile/$json") {
-                popUpTo(navController.graph.findStartDestination().id) {
-                    saveState = true
-                }
-                launchSingleTop = true
-                restoreState = true
-            }
-        }) {
+        Column(
+            Modifier
+                .padding(20.dp, 20.dp, 20.dp, 10.dp)
+                .clickable {
+                    val json = Uri.encode(Gson().toJson(tweets[0].user))
+                    navController?.navigate("profile/$json") {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                }) {
             Avatar(user = tweets[0].user)
         }
         UserInfo(user = tweets[0].user)
         Divider()
         LazyColumn() {
             items(drawerrowcontents) { content ->
-                if (content.setting == "Settings and Privacy"){
+                if (content.setting == "Settings and Privacy") {
                     showDrawerRow(
                         content.setting, content.image, modifier = Modifier
                             .fillMaxWidth()
@@ -191,7 +227,7 @@ fun mydrawercontent(
                                 navController?.navigate("settings")
                             }
                     )
-                }else if(content.setting == "Profile"){
+                } else if (content.setting == "Profile") {
                     showDrawerRow(
                         content.setting, content.image, modifier = Modifier
                             .fillMaxWidth()
@@ -207,7 +243,7 @@ fun mydrawercontent(
                                 }
                             }
                     )
-                }else{
+                } else {
                     showDrawerRow(
                         content.setting, content.image, modifier = Modifier
                             .fillMaxWidth()
@@ -216,19 +252,9 @@ fun mydrawercontent(
                 }
 
 
-
             }
 
         }
-//        Text(text = "Hello")
-//        Text("Text in Drawer")
-//        Button(onClick = {
-//            scope.launch {
-//                scaffoldState.drawerState.close()
-//            }
-//        }) {
-//            Text("Close Drawer")
-//        }
     }
 }
 
@@ -251,10 +277,10 @@ fun mybottombar(navController: NavController?) {
                                 painter = painterResource(id = screen.resourceId),
                                 contentDescription = null,
                                 modifier = Modifier
-                                    .clip(
-                                        RoundedCornerShape(20.dp)
-                                    )
-                                    .size(40.dp)
+//                                    .clip(
+//                                        RoundedCornerShape(20.dp)
+//                                    )
+                                    .size(25.dp)
                             )
                         },
                         selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
@@ -286,7 +312,7 @@ fun mytopbar(scope: CoroutineScope, scaffoldState: ScaffoldState) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
-            painter = painterResource(id = R.drawable.profile_photo),
+            painter = painterResource(id = R.drawable.real_anupreet_avatar),
             contentDescription = null,
             modifier = Modifier
                 .clip(
@@ -300,7 +326,7 @@ fun mytopbar(scope: CoroutineScope, scaffoldState: ScaffoldState) {
                 }
         )
         Image(
-            painter = painterResource(id = R.drawable.profile_photo),
+            painter = painterResource(id = R.drawable.twitter_1),
             contentDescription = null,
             modifier = Modifier
                 .clip(
@@ -309,7 +335,7 @@ fun mytopbar(scope: CoroutineScope, scaffoldState: ScaffoldState) {
                 .size(30.dp)
         )
         Image(
-            painter = painterResource(id = R.drawable.profile_photo),
+            painter = painterResource(id = R.drawable.trends),
             contentDescription = null,
             modifier = Modifier
                 .clip(
@@ -322,12 +348,26 @@ fun mytopbar(scope: CoroutineScope, scaffoldState: ScaffoldState) {
 }
 
 
+class MyViewModel : ViewModel() {
+    var tweetText by mutableStateOf("")
+    fun onTweetChange(newString: String) {
+        tweetText = newString
+    }
+    var settingText by mutableStateOf("")
+    fun onSettingTextChange(newString: String) {
+        settingText = newString
+    }
+    var searchMessageText by mutableStateOf("")
+    fun onSearchMessageTextChange(newString: String) {
+        searchMessageText = newString
+    }
+}
+
+
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     TwitterCloneTheme {
-        CommonScaffold {
-            ScreenHome()
-        }
+        CommonScaffold(content = {})
     }
 }
